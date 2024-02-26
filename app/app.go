@@ -1,6 +1,8 @@
 package app
 
-import "config/mysql"
+import (
+	"github.com/666999777555/go-init/mysql"
+)
 
 func Init(apps ...string) error {
 	var err error
