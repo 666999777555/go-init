@@ -3,6 +3,7 @@ module github.com/666999777555/go-init
 go 1.21.2
 
 require (
+	github.com/nacos-group/nacos-sdk-go/v2 v2.2.5
 	github.com/spf13/viper v1.18.2
 	google.golang.org/grpc v1.62.0
 	gorm.io/driver/mysql v1.5.4
