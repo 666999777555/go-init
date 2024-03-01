@@ -25,12 +25,18 @@ func InitMysql(severName string) error {
 		mysql mysqlConfig
 	}
 	mysqlConfigVal := Val{}
-	content, err := config.InitNacos("user", "demo")
+	content, err := config.GetConfig("user", "demo")
 	err = yaml.Unmarshal([]byte(content), &mysqlConfigVal)
 	if err != nil {
 		fmt.Println(err.Error())
 		return err
 	}
+
+	err = config.ListConfig("user","demo")
+	if err != nil {
+		return err
+	}
+
 	fmt.Println(content)
 	fmt.Println(mysqlConfigVal)
 	configMysql := mysqlConfigVal.mysql
@@ -44,4 +50,15 @@ func InitMysql(severName string) error {
 	)
 	Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	return err
+}
+
+func WithTx(txFc func(tx *gorm.DB) error) {
+	var err error
+	tx := Db.Begin()
+	err = txFc(tx)
+	if err != nil {
+		tx.Rollback()
+		return
+	}
+	tx.Commit()
 }
