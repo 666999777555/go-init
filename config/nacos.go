@@ -32,7 +32,10 @@ func InitNacos() error {
 			ServerConfigs: sc,
 		},
 	)
-	return err
+	fmt.Println("******************err")
+	fmt.Println(err)
+	fmt.Println(client)
+	panic(err)
 }
 
 func GetConfig(group, dataId string) (string, error) {
