@@ -20,7 +20,10 @@ type mysqlConfig struct {
 }
 
 func InitMysql(severName string) error {
-	var err error
+	err := config.InitNacos()
+	if err != nil {
+		return err
+	}
 	type Val struct {
 		mysql mysqlConfig
 	}
@@ -32,7 +35,7 @@ func InitMysql(severName string) error {
 		return err
 	}
 
-	err = config.ListConfig("user","demo")
+	err = config.ListConfig("user", "demo")
 	if err != nil {
 		return err
 	}
