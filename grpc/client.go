@@ -9,7 +9,7 @@ import (
 )
 
 func Client(toService string) (*grpc.ClientConn, error) {
-	cnfStr, err := config.GetConfig("DEFAULT_GROUP", toService)
+	cnfStr, err := config.GetConfig("demo", toService)
 	if err != nil {
 		return nil, err
 	}
