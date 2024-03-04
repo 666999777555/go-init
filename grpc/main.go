@@ -34,7 +34,7 @@ func Register(serviceName string, res func(s *grpc.Server)) error {
 	if err != nil {
 		return err
 	}
-	lis, err := net.Listen("tcp", fmt.Sprintf("%V:%v", cof.App.Ip, cof.App.Port))
+	lis, err := net.Listen("tcp", fmt.Sprintf("%v:%v", cof.App.Ip, cof.App.Port))
 	if err != nil {
 		log.Fatalf(err.Error())
 		return err
