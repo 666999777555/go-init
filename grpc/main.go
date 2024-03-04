@@ -17,19 +17,19 @@ type Config struct {
 }
 
 func getConfig(serviceName string) (*Config, error) {
-	ConfigInfo, err := config.GetConfig("DEFAULT_GROUP", serviceName)
+	ConfigInfo, err := config.GetConfig("demo", serviceName)
 	if err != nil {
 		return nil, err
 	}
 	cnf := new(Config)
-	err = yaml.Unmarshal([]byte(ConfigInfo), cnf)
+	err = yaml.Unmarshal([]byte(ConfigInfo),cnf)
 	if err != nil {
 		return nil, err
 	}
 	return nil, err
 }
 
-func Register(serviceName string, res func(s *grpc.Server)) error {
+func Register(serviceName string, register func(s *grpc.Server)) error {
 	cof, err := getConfig(serviceName)
 	if err != nil {
 		return err
@@ -40,6 +40,7 @@ func Register(serviceName string, res func(s *grpc.Server)) error {
 		return err
 	}
 	g := grpc.NewServer()
+	register(g)
 	log.Printf("sever listening at %v", lis.Addr())
 	if err := g.Serve(lis); err != nil {
 		log.Fatalf(err.Error())
