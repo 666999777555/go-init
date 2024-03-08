@@ -1,19 +1,26 @@
 package app
 
 import (
+	"github.com/666999777555/go-init/config"
 	"github.com/666999777555/go-init/mysql"
 )
 
-func Init(name string, apps ...string) error {
-	var err error
-	for _, val := range apps {
+func Init(
+	serviceName string,
+	naocsIP, nacosPort string,
+	app ...string,
+) error {
+	if err := config.InitNacos(naocsIP, nacosPort); err != nil {
+		return err
+	}
+	for _, val := range app {
 		switch val {
 		case "mysql":
-			err = mysql.InitMysql(name)
+			err := mysql.InitMysql(serviceName)
 			if err != nil {
 				panic(err)
 			}
 		}
 	}
-	return err
+	return nil
 }

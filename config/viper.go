@@ -1,11 +1,19 @@
 package config
 
-import "github.com/spf13/viper"
+import (
+	"fmt"
+	"github.com/spf13/viper"
+)
 
-func ReadConfig(filePath string) {
-	viper.SetConfigFile("user/cofing/user.yaml")
-	err := viper.ReadInConfig()
-	if err != nil {
-		return
+func ReadConfig(fileName, filePath string) error {
+	viper.SetConfigFile(fileName)
+	viper.AddConfigPath(filePath)
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			return fmt.Errorf("no suh config file")
+		} else {
+			return fmt.Errorf("no suh config file")
+		}
 	}
+	return nil
 }

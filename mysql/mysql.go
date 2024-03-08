@@ -14,21 +14,20 @@ var Db *gorm.DB
 type mysqlConfig struct {
 	Host     string `yaml:"host"`
 	Port     string `yaml:"port"`
-	Name     string `yaml:"name"`
+	Name     string `yaml:"username"`
 	Password string `yaml:"password"`
 	Data     string `yaml:"data"`
 }
 
 func InitMysql(severName string) error {
-	err := config.InitNacos()
-	if err != nil {
-		return err
-	}
 	type Val struct {
-		mysql mysqlConfig
+		Mysql mysqlConfig `yaml:"mysql"`
 	}
 	mysqlConfigVal := Val{}
-	content, err := config.GetConfig("user", "demo")
+	content, err := config.GetConfig("DEFAULT_GROUP", "user")
+	fmt.Println("****************content")
+	fmt.Println(content)
+	fmt.Println(err)
 	err = yaml.Unmarshal([]byte(content), &mysqlConfigVal)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -40,9 +39,7 @@ func InitMysql(severName string) error {
 		return err
 	}
 
-	fmt.Println(content)
-	fmt.Println(mysqlConfigVal)
-	configMysql := mysqlConfigVal.mysql
+	configMysql := mysqlConfigVal.Mysql
 	// 参考 https://github.com/go-sql-driver/mysql#dsn-data-source-name 获取详情
 	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local",
 		configMysql.Name,

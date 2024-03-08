@@ -6,17 +6,16 @@ import (
 	"github.com/nacos-group/nacos-sdk-go/v2/clients/config_client"
 	"github.com/nacos-group/nacos-sdk-go/v2/common/constant"
 	"github.com/nacos-group/nacos-sdk-go/v2/vo"
+	"strconv"
 )
-
-const ip = "127.0.0.01"
-const port = 8848
 
 var client config_client.IConfigClient
 
-func InitNacos() error {
+func InitNacos(ip, port string) error {
 	var err error
+	portInt, err := strconv.Atoi(port)
 	sc := []constant.ServerConfig{
-		*constant.NewServerConfig(ip, port, constant.WithContextPath("/nacos")),
+		*constant.NewServerConfig(ip, uint64(portInt), constant.WithContextPath("/nacos")),
 	}
 	cc := *constant.NewClientConfig(
 		constant.WithNamespaceId(""),
@@ -32,10 +31,7 @@ func InitNacos() error {
 			ServerConfigs: sc,
 		},
 	)
-	fmt.Println("******************err")
-	fmt.Println(err)
-	fmt.Println(client)
-	panic(err)
+	return err
 }
 
 func GetConfig(group, dataId string) (string, error) {
@@ -53,8 +49,8 @@ func GetConfig(group, dataId string) (string, error) {
 func ListConfig(group, dataId string) error {
 	return client.ListenConfig(
 		vo.ConfigParam{
-			DataId: group,
-			Group:  dataId,
+			DataId: dataId,
+			Group:  group,
 			OnChange: func(namespace, group, dataId, data string) {
 				fmt.Println("config changed group:" + group + ", dataId:" + dataId + ", content:" + data)
 			},
